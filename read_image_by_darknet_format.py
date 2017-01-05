@@ -1,6 +1,8 @@
 import cv2
+import glob
 
-im_id = "0"
+file_names = glob.glob("./images/*")
+im_id = file_names[0].split("/")[-1].split(".")[0]
 im = cv2.imread("./images/%s.jpg" % (im_id))
 (im_h, im_w) = im.shape[:2]
 
