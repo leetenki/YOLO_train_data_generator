@@ -95,10 +95,13 @@ with open("label.txt", "w") as f:
     for label in labels:
         f.write("%s\n" % (label))
 
-# train用の画像生成
+background_height, background_width = (416, 416)
 train_images = 10000
+test_images = 2000
+
+# train用の画像生成
 for i in range(train_images):
-    sampled_background = random_sampling(background_image, 416, 416)
+    sampled_background = random_sampling(background_image, background_height, background_width)
 
     class_id = np.random.randint(len(labels))
     fruit = fruits[class_id]
@@ -108,7 +111,7 @@ for i in range(train_images):
     yolo_bbox = yolo_format_bbox(result, bbox)
 
     # 画像ファイルを保存
-    image_path = "%s/images/%s_%s.jpg" % (base_path, i, labels[class_id])
+    image_path = "%s/images/train_%s_%s.jpg" % (base_path, i, labels[class_id])
     cv2.imwrite(image_path, result)
 
     # 画像ファイルのパスを追記
@@ -116,16 +119,15 @@ for i in range(train_images):
         f.write("%s\n" % (image_path))
 
     # ラベルファイルを保存
-    label_path = "%s/labels/%s_%s.txt" % (base_path, i, labels[class_id]) 
+    label_path = "%s/labels/train_%s_%s.txt" % (base_path, i, labels[class_id]) 
     with open(label_path, "w") as f:
         f.write("%s %s %s %s %s" % (class_id, yolo_bbox[0], yolo_bbox[1], yolo_bbox[2], yolo_bbox[3]))
 
     print("train image", i, labels[class_id], yolo_bbox)
 
 # test用の画像生成
-test_images = 2000
 for i in range(test_images):
-    sampled_background = random_sampling(background_image, 416, 416)
+    sampled_background = random_sampling(background_image, background_height, background_width)
 
     class_id = np.random.randint(len(labels))
     fruit = fruits[class_id]
@@ -135,7 +137,7 @@ for i in range(test_images):
     yolo_bbox = yolo_format_bbox(result, bbox)
 
     # 画像ファイルを保存
-    image_path = "%s/images/%s_%s.jpg" % (base_path, i, labels[class_id])
+    image_path = "%s/images/test_%s_%s.jpg" % (base_path, i, labels[class_id])
     cv2.imwrite(image_path, result)
 
     # 画像ファイルのパスを追記
@@ -143,7 +145,7 @@ for i in range(test_images):
         f.write("%s\n" % (image_path))
 
     # ラベルファイルを保存
-    label_path = "%s/labels/%s_%s.txt" % (base_path, i, labels[class_id]) 
+    label_path = "%s/labels/test_%s_%s.txt" % (base_path, i, labels[class_id]) 
     with open(label_path, "w") as f:
         f.write("%s %s %s %s %s" % (class_id, yolo_bbox[0], yolo_bbox[1], yolo_bbox[2], yolo_bbox[3]))
 

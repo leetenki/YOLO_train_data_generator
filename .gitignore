@@ -1,4 +1,5 @@
 images/*
 labels/*
 train.txt
+test.txt
 label.txt
