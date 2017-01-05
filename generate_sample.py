@@ -90,6 +90,11 @@ for fruit_file in fruit_files:
     fruits.append(cv2.imread(fruit_file, cv2.IMREAD_UNCHANGED))
 background_image = cv2.imread("background.jpg")
 
+# write label file
+with open("label.txt", "w") as f:
+    for label in labels:
+        f.write("%s\n" % (label))
+
 num_images = 10000
 for i in range(num_images):
     sampled_background = random_sampling(background_image, 416, 416)
@@ -102,7 +107,7 @@ for i in range(num_images):
     yolo_bbox = yolo_format_bbox(result, bbox)
 
     # 画像ファイルを保存
-    image_path = "%s/images/%s.jpg" % (base_path, i)
+    image_path = "%s/images/%s_%s.jpg" % (base_path, i, labels[class_id])
     cv2.imwrite(image_path, result)
 
     # 画像ファイルのパスを追記
@@ -110,7 +115,7 @@ for i in range(num_images):
         f.write("%s\n" % (image_path))
 
     # ラベルファイルを保存
-    label_path = "%s/labels/%s.txt" % (base_path, i) 
+    label_path = "%s/labels/%s_%s.txt" % (base_path, i, labels[class_id]) 
     with open(label_path, "w") as f:
         f.write("%s %s %s %s %s" % (class_id, yolo_bbox[0], yolo_bbox[1], yolo_bbox[2], yolo_bbox[3]))
 
